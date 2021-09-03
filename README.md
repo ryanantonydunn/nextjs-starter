@@ -156,6 +156,15 @@ And add a script to run the checks:
 "lint-js": "eslint '*/**/*.{js,jsx,ts,tsx}' --fix"
 ```
 
+#### Linting Typescript
+
+We can set up a script that will report any typescript errors. This is useful when setting up automatic linting to fail in a pipeline:
+
+```
+// package.json "scripts" object
+"lint-ts": "tsc -p tsconfig.json --noEmit",
+```
+
 #### Set up Stylelint
 
 Install the package: `npm i -D stylelint` and add a `.stylelintrc.js` to the root of the project to configure. An example is included that is fairly relaxed but catches obvious errors like duplicate properties, etc. Finally, add a script to run the checks:
@@ -173,3 +182,5 @@ Install the package: `npm i -D prettier` and add a `.prettierrc` and `.prettieri
 // package.json "scripts" object
 "format": "prettier '*/**/*.{js,jsx,ts,tsx,json,md}' --write",
 ```
+
+#### Set up Husky
