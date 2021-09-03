@@ -1,9 +1,5 @@
 # NextJS starter instructions
 
-To run:
-
-`
-
 Stack:
 
 - Typescript
@@ -127,4 +123,37 @@ module.exports = {
 
 This will also work for any additional scss files in the root, eg: `_mixins.scss` and `@import "variables"; @import "mixins";`.
 
+### 6. Linting
+
+The linting combination of packages here is this:
+
+- ESLint to check Javascript and Typescript
+- Prettier to automatically format JS code
+- Stylelint to check and format CSS
+- Husky / lint-staged to run all the checks and automatic fixes when git commits are made
+
+#### Set up ESLint
+
+First install the required packages, or whichever packages you'll need for your config: `npm i -D eslint eslint-config-next eslint-plugin-jsx-a11y eslint-plugin-react eslint-plugin-react-hooks @typescript-eslint/eslint-plugin @typescript-eslint/parser`
+
+Create a `.eslintrc.js` file in the root of the project to configure. This can be changed to your preferences or needs for the project. This project has an example included that addresses some specific issues with NextJS and uses the typescript parser.
+
+And add a script to run the checks:
+
+```
+// package.json "scripts" object
+"lint-js": "eslint '*/**/*.{js,jsx,ts,tsx}' --fix"
+```
+
+.stylelintrc
+
+https://nextjs.org/docs/basic-features/eslint
+
+Stylelint
+
 ### 5. Prettier Auto-formatting
+
+- create .prettierrc
+- create .prettierignore
+- package.json script: "format": "prettier '_/\*\*/_.{js,jsx,ts,tsx,json,md}' --write",
+- npm i -D prettier
