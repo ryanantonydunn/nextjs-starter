@@ -141,7 +141,7 @@ The linting combination of packages here is this:
 -   Stylelint to check and format CSS
 -   Husky / lint-staged to run all the checks and automatic fixes when git commits are made
 
-More information on configuring this is on the (NextJS website)[https://nextjs.org/docs/basic-features/eslint]
+More information on configuring this is on the [NextJS website](https://nextjs.org/docs/basic-features/eslint)
 
 #### Set up ESLint
 
@@ -177,7 +177,7 @@ Install the package: `npm i -D prettier` and add a `.prettierrc` and `.prettieri
 
 #### Set up Husky
 
-Full information about installing husky is on [https://github.com/typicode/husky](the Github page)
+Full information about installing husky is on [the Github page](https://github.com/typicode/husky)
 
 Install the packages `npm i -D husky lint-staged`
 
