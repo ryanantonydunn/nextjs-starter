@@ -1,13 +1,22 @@
 # NextJS starter instructions
 
+Creating starter writeup TODO:
+
+- ~~NextJS / TS~~
+- ~~Component structure~~
+- ~~Absolute paths~~
+- ~~SASS / Modules / Global styles~~
+- Linting - ESLint / Stylelint / Prettier / Husky
+- React Testing Library
+- Storybook
+- MSW API Mocking
+
 Stack:
 
 - Typescript
 - React
 - NextJS
-- Docker (Optional)
-- CSS Modules
-- SASS
+- CSS Modules / SASS
 - Storybook
 - React Testing Library / Jest
 - MSW
@@ -132,6 +141,8 @@ The linting combination of packages here is this:
 - Stylelint to check and format CSS
 - Husky / lint-staged to run all the checks and automatic fixes when git commits are made
 
+More information on configuring this is on the (NextJS website)[https://nextjs.org/docs/basic-features/eslint]
+
 #### Set up ESLint
 
 First install the required packages, or whichever packages you'll need for your config: `npm i -D eslint eslint-config-next eslint-plugin-jsx-a11y eslint-plugin-react eslint-plugin-react-hooks @typescript-eslint/eslint-plugin @typescript-eslint/parser`
@@ -145,13 +156,16 @@ And add a script to run the checks:
 "lint-js": "eslint '*/**/*.{js,jsx,ts,tsx}' --fix"
 ```
 
-.stylelintrc
+#### Set up Stylelint
 
-https://nextjs.org/docs/basic-features/eslint
+Install the package: `npm i -D stylelint` and add a `.stylelintrc.js` to the root of the project to configure. An example I prefer is included that is fairly relaxed but catches obvious errors like duplicate properties, etc. Finally, add a script to run the checks:
 
-Stylelint
+```
+// package.json "scripts" object
+"lint-css": "stylelint '*/**/*.{css,scss}' --fix",
+```
 
-### 5. Prettier Auto-formatting
+#### Set up Prettier
 
 - create .prettierrc
 - create .prettierignore
