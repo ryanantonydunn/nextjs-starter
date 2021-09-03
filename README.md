@@ -2,39 +2,39 @@
 
 Creating starter writeup TODO:
 
-- ~~NextJS / TS~~
-- ~~Component structure~~
-- ~~Absolute paths~~
-- ~~SASS / Modules / Global styles~~
-- Linting - ESLint / Stylelint / Prettier / Husky
-- React Testing Library
-- Storybook
-- MSW API Mocking
+-   ~~NextJS / TS~~
+-   ~~Component structure~~
+-   ~~Absolute paths~~
+-   ~~SASS / Modules / Global styles~~
+-   Linting - ESLint / Stylelint / Prettier / Husky
+-   React Testing Library
+-   Storybook
+-   MSW API Mocking
 
 Stack:
 
-- Typescript
-- React
-- NextJS
-- CSS Modules / SASS
-- Storybook
-- React Testing Library / Jest
-- MSW
-- ESLint / StyleLint / Prettier
-- Husky / Lint Staged
+-   Typescript
+-   React
+-   NextJS
+-   CSS Modules / SASS
+-   Storybook
+-   React Testing Library / Jest
+-   MSW
+-   ESLint / StyleLint / Prettier
+-   Husky / Lint Staged
 
 Components
 
-- atoms/form-fields/TextInput
-- atoms/form-fields/Select
-- atoms/Button / LinkButton
-- organisms/ApiExample
+-   atoms/form-fields/TextInput
+-   atoms/form-fields/Select
+-   atoms/Button / LinkButton
+-   organisms/ApiExample
 
 Considerations:
 
-- Use instructions to build project rather than starter, packages will be more up to date and bits of the stack can be left out as needed or wanted
-- All are optional including stack choices and linting settings
-- Folder structure is added but is only suggested
+-   Use instructions to build project rather than starter, packages will be more up to date and bits of the stack can be left out as needed or wanted
+-   All are optional including stack choices and linting settings
+-   Folder structure is added but is only suggested
 
 ## Instructions to create from scratch
 
@@ -136,10 +136,10 @@ This will also work for any additional scss files in the root, eg: `_mixins.scss
 
 The linting combination of packages here is this:
 
-- ESLint to check Javascript and Typescript
-- Prettier to automatically format JS code
-- Stylelint to check and format CSS
-- Husky / lint-staged to run all the checks and automatic fixes when git commits are made
+-   ESLint to check Javascript and Typescript
+-   Prettier to automatically format JS code
+-   Stylelint to check and format CSS
+-   Husky / lint-staged to run all the checks and automatic fixes when git commits are made
 
 More information on configuring this is on the (NextJS website)[https://nextjs.org/docs/basic-features/eslint]
 
@@ -158,7 +158,7 @@ And add a script to run the checks:
 
 #### Set up Stylelint
 
-Install the package: `npm i -D stylelint` and add a `.stylelintrc.js` to the root of the project to configure. An example I prefer is included that is fairly relaxed but catches obvious errors like duplicate properties, etc. Finally, add a script to run the checks:
+Install the package: `npm i -D stylelint` and add a `.stylelintrc.js` to the root of the project to configure. An example is included that is fairly relaxed but catches obvious errors like duplicate properties, etc. Finally, add a script to run the checks:
 
 ```
 // package.json "scripts" object
@@ -167,7 +167,9 @@ Install the package: `npm i -D stylelint` and add a `.stylelintrc.js` to the roo
 
 #### Set up Prettier
 
-- create .prettierrc
-- create .prettierignore
-- package.json script: "format": "prettier '_/\*\*/_.{js,jsx,ts,tsx,json,md}' --write",
-- npm i -D prettier
+Install the package: `npm i -D prettier` and add a `.prettierrc` and `.prettierignore` to the root of the project to configure. Examples are included. Finally, add a script to run on the project:
+
+```
+// package.json "scripts" object
+"format": "prettier '*/**/*.{js,jsx,ts,tsx,json,md}' --write",
+```
