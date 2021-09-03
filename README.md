@@ -149,19 +149,11 @@ First install the required packages, or whichever packages you'll need for your 
 
 Create a `.eslintrc.js` file in the root of the project to configure. This can be changed to your preferences or needs for the project. This project has an example included that addresses some specific issues with NextJS and uses the typescript parser.
 
-And add a script to run the checks:
+Set up a script to run the checks. We can also set up a specific one that will report any typescript errors. This is useful when setting up automatic linting to fail in a pipeline.
 
 ```
 // package.json "scripts" object
-"lint-js": "eslint '*/**/*.{js,jsx,ts,tsx}' --fix"
-```
-
-#### Linting Typescript
-
-We can set up a script that will report any typescript errors. This is useful when setting up automatic linting to fail in a pipeline:
-
-```
-// package.json "scripts" object
+"lint-js": "eslint '*/**/*.{js,jsx,ts,tsx}' --fix",
 "lint-ts": "tsc -p tsconfig.json --noEmit",
 ```
 
@@ -184,3 +176,31 @@ Install the package: `npm i -D prettier` and add a `.prettierrc` and `.prettieri
 ```
 
 #### Set up Husky
+
+Full information about installing husky is on [https://github.com/typicode/husky](the Github page)
+
+Install the packages `npm i -D husky lint-staged`
+
+Then install the git hooks in the project: `npx husky install`.
+
+Add a script to `package.json` to install the git hooks when the project dependencies are installed for other users: `"prepare": "husky install",`
+
+When configuring the script that will run on commit there are several ways that work - Here I've set up a `lint-staged.config.js` file in the root of the project because running the `lint-ts` script above won't work unless it's inside a function syntax:
+
+```
+// ./lint-staged.config.js
+module.exports = {
+  '*.{js,jsx,ts,tsx,json,md}': 'prettier --write',
+  '*.{js,jsx,ts,tsx}': 'eslint --fix',
+  '*.{css,scss}': 'stylelint --fix',
+  '*.{ts,tsx}': () => 'tsc -p tsconfig.json --noEmit',
+};
+```
+
+And to add this script to the pre-commit hook run this command:
+
+```
+npx husky add .husky/pre-commit "npx lint-staged"
+```
+
+Any commits should now be automatically linted and fail with an appropriate error when necessary.
