@@ -6,7 +6,7 @@ Creating starter writeup TODO:
 -   ~~Component structure~~
 -   ~~Absolute paths~~
 -   ~~SASS / Modules / Global styles~~
--   Linting - ESLint / Stylelint / Prettier / Husky
+-   ~~Linting - ESLint / Stylelint / Prettier / Husky~~
 -   React Testing Library
 -   Storybook
 -   MSW API Mocking
