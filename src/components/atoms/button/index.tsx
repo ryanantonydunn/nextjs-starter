@@ -1,6 +1,6 @@
 import React from 'react';
 import Link, { LinkProps } from 'next/link';
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 // Use Button for semantic button or LinkButton for anchor
 

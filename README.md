@@ -5,8 +5,8 @@ Creating starter writeup TODO:
 -   ~~NextJS / TS~~
 -   ~~Component structure~~
 -   ~~Absolute paths~~
--   ~~SASS / Modules / Global styles~~
 -   ~~Linting - ESLint / Stylelint / Prettier / Husky~~
+-   CSS Modules / PostCSS / Global styles
 -   React Testing Library
 -   Storybook
 -   MSW API Mocking
@@ -16,7 +16,8 @@ Stack:
 -   Typescript
 -   React
 -   NextJS
--   CSS Modules / SASS
+-   CSS Modules
+-   PostCSS + Nesting
 -   Storybook
 -   React Testing Library / Jest
 -   MSW
@@ -51,13 +52,12 @@ In this starter all styles, components and API code is inside an `src` folder in
 ```
 - src
 +-- styles (global styles available to all components)
-  +-- _variables.scss
-  +-- globals.scss
+  +-- globals.css
 +-- components
   +-- atoms (small re-usable components)
     +-- button
       +-- index.tsx (the react component)
-      +-- index.module.scss (the css module for the component, co-located alongside the component)
+      +-- index.module.css (the css module for the component, co-located alongside the component)
       +-- index.test.tsx (the testing library test, also co-located)
       +-- index.stories.tsx (storybook stories, also co-located)
   +-- molecules (larger re-usable components that may contain atoms)
@@ -92,23 +92,14 @@ Now inside a component we can import like this:
 import { Button } from 'src/components/atoms/button'
 ```
 
-### 4. Set up SASS
+### 4. Set up PostCSS with plugins
 
-Install sass into the project: `npm i -S sass`
+PostCSS is included in Next by default. To use additional plugins you need to create a `custom postcss.config.js` file in the root of the project. To enable nesting you just need to set `"nesting-rules": true` in the feature object of `postcss-preset-env`.
 
-Now where there are `.module.css` files we can change to `.module.scss` files and use SASS as needed. To organise I recommend co-locating CSS modules alongside the component files in the `src folder structure like this:
+More information about styling in Next is [on the website](https://nextjs.org/docs/advanced-features/customizing-postcss-config)
+.
 
-```
-// folder structure
-- index.tsx
-- index.module.scss
-
-// inside index.tsx
-import { styles } from './index.module.scss'
-
-```
-
-#### Global styles and variables/mixins
+#### Global styles and variables
 
 I've set up a folder inside `./src/styles` to handle globals and variables here. To add the globals to the whole app just import the file directly into the custom `_app.tsx` inside `./pages`:
 
@@ -117,22 +108,9 @@ I've set up a folder inside `./src/styles` to handle globals and variables here.
 import "src/styles/globals.css";
 ```
 
-Normally to add sass variables to every scss module you would need to prepend it to each module individually. We can do that automatically by editing the `./next.config.js` with this:
+Variables are add
 
-```
-const path = require('path');
-
-module.exports = {
-  sassOptions: {
-    includePaths: [path.join(__dirname, 'src/styles')],
-    prependData: `@import "variables";`,
-  },
-};
-```
-
-This will also work for any additional scss files in the root, eg: `_mixins.scss` and `@import "variables"; @import "mixins";`.
-
-### 6. Linting
+### 5. Linting
 
 The linting combination of packages here is this:
 
@@ -163,7 +141,7 @@ Install the package: `npm i -D stylelint` and add a `.stylelintrc.js` to the roo
 
 ```
 // package.json "scripts" object
-"lint-css": "stylelint '*/**/*.{css,scss}' --fix",
+"lint-css": "stylelint '*/**/*.{css}' --fix",
 ```
 
 #### Set up Prettier
@@ -192,7 +170,7 @@ When configuring the script that will run on commit there are several ways that 
 module.exports = {
   '*.{js,jsx,ts,tsx,json,md}': 'prettier --write',
   '*.{js,jsx,ts,tsx}': 'eslint --fix',
-  '*.{css,scss}': 'stylelint --fix',
+  '*.{css}': 'stylelint --fix',
   '*.{ts,tsx}': () => 'tsc -p tsconfig.json --noEmit',
 };
 ```
@@ -204,3 +182,15 @@ npx husky add .husky/pre-commit "npx lint-staged"
 ```
 
 Any commits should now be automatically linted and fail with an appropriate error when necessary.
+
+### 7. React Testing Library
+
+Full information about installing RTL with nextjs is on [the website](https://nextjs.org/docs/testing)
+
+Install the packages: `npm i -D jest babel-jest @testing-library/react @testing-library/jest-dom identity-obj-proxy react-test-renderer`
+
+Create a `jest.config.js` file in the root of the project. There is a standard one on the nextjs documentation or a complete customised one in this repo.
+
+Create a `test` folder in the root of the project for test helpers to live.
+
+####

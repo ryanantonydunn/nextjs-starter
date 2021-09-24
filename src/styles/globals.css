@@ -1,0 +1,49 @@
+:root {
+	--colorBlack: #000;
+	--colorWhite: #fff;
+	--colorBlue: #2244cc;
+
+	--fontFamilyBase: Helvetica, arial, sans-serif;
+	--fontFamilyHeading: Georgia, serif;
+
+	--fontSizeRegular: 1.2rem;
+	--fontSizeLarge: 2rem;
+
+	--shadowLarge: 0 2px 30px 0 rgba(var(--colorBlack), 0.15);
+}
+
+body {
+	font-family: var(--fontFamilyBase);
+	margin: 0;
+}
+
+button {
+	font-family: inherit;
+}
+
+/* Layout */
+.visually-hidden {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4 {
+	font-family: var(--fontFamilyHeading);
+}
+
+h1 {
+	font-size: var(--fontSizeLarge);
+}
+
+p {
+	font-size: var(--fontSizeRegular);
+}
