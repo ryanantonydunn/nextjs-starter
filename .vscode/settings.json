@@ -1,0 +1,4 @@
+{
+	"cssVariables.lookupFiles": ["src/styles/globals.css"],
+	"files.associations": { "*.css": "postcss" }
+}

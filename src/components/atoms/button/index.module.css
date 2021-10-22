@@ -11,7 +11,7 @@
 
 .primary {
 	background-color: var(--colorBlack);
-	color: var(--colorBlack);
+	color: var(--colorWhite);
 	border: 1px solid var(--colorBlack);
 	&:hover,
 	&:focus {

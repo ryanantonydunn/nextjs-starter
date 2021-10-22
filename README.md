@@ -92,12 +92,17 @@ Now inside a component we can import like this:
 import { Button } from 'src/components/atoms/button'
 ```
 
-### 4. Set up PostCSS with plugins
+### 4. Set up PostCSS
 
 PostCSS is included in Next by default. To use additional plugins you need to create a `custom postcss.config.js` file in the root of the project. To enable nesting you just need to set `"nesting-rules": true` in the feature object of `postcss-preset-env`.
 
+In VSCode - at the time of writing it's slightly awkward to get proper nested syntax highlighting _without_ breaking the normal CSS intellisense. Use the `postcss-sugarss-language` extension and not the `PostCSS Language Support` extension and add this to the workspace settings:
+
+```
+"files.associations": { "*.css": "postcss" },
+```
+
 More information about styling in Next is [on the website](https://nextjs.org/docs/advanced-features/customizing-postcss-config)
-.
 
 #### Global styles and variables
 
@@ -108,7 +113,9 @@ I've set up a folder inside `./src/styles` to handle globals and variables here.
 import "src/styles/globals.css";
 ```
 
-Variables are add
+Variables are set in the `:root` element inside `globals.css` and are then available inside any module.
+
+As far as I know, at the time of writing - there is _not_ a way to get any CSS variable autocomplete extension in vscode to work alongside the postcss syntax highlighting extension, you can have either one or the other. Any solution to this would be welcome.
 
 ### 5. Linting
 

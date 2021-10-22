@@ -1,14 +1,16 @@
 :root {
+	/* colors */
 	--colorBlack: #000;
 	--colorWhite: #fff;
 	--colorBlue: #2244cc;
 
+	/* fonts */
 	--fontFamilyBase: Helvetica, arial, sans-serif;
 	--fontFamilyHeading: Georgia, serif;
-
 	--fontSizeRegular: 1.2rem;
 	--fontSizeLarge: 2rem;
 
+	/* shadows */
 	--shadowLarge: 0 2px 30px 0 rgba(var(--colorBlack), 0.15);
 }
 
@@ -21,7 +23,7 @@ button {
 	font-family: inherit;
 }
 
-/* Layout */
+/* layout */
 .visually-hidden {
 	clip: rect(0 0 0 0);
 	clip-path: inset(50%);
@@ -32,7 +34,7 @@ button {
 	width: 1px;
 }
 
-/* Typography */
+/* typography */
 h1,
 h2,
 h3,
