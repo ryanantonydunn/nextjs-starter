@@ -7,7 +7,8 @@ Creating starter writeup TODO:
 -   ~~Absolute paths~~
 -   ~~Linting - ESLint / Stylelint / Prettier / Husky~~
 -   ~~CSS Modules / PostCSS / Global styles~~
--   React Testing Library
+-   ~~React Testing Library~~
+-   Custom pages folder
 -   Storybook
 -   MSW API Mocking
 
