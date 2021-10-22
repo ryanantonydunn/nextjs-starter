@@ -116,7 +116,7 @@ import "src/styles/globals.css";
 
 Variables are set in the `:root` element inside `globals.css` and are then available inside any module.
 
-As far as I know, at the time of writing - there is _not_ a way to get any CSS variable autocomplete extension in vscode to work alongside the postcss syntax highlighting extension, you can have either one or the other. Any solution to this would be welcome.
+⚠️ As far as I know, at the time of writing - there is _not_ a way to get any CSS variable autocomplete extension in vscode to work alongside the postcss syntax highlighting extension, you can have either one or the other. Any solution to this would be welcome.
 
 ### 5. Linting
 
