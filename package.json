@@ -10,7 +10,9 @@
 		"lint-js": "eslint '*/**/*.{js,jsx,ts,tsx}' --fix",
 		"lint-ts": "tsc -p tsconfig.json --noEmit",
 		"lint-css": "stylelint '*/**/*.{css}' --fix",
-		"format": "prettier '*/**/*.{js,jsx,ts,tsx,json,md}' --write"
+		"format": "prettier '*/**/*.{js,jsx,ts,tsx,json,md}' --write",
+		"test": "jest",
+		"test-watch": "jest --watch"
 	},
 	"dependencies": {
 		"next": "11.1.0",

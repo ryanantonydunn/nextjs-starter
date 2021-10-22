@@ -6,7 +6,7 @@ Creating starter writeup TODO:
 -   ~~Component structure~~
 -   ~~Absolute paths~~
 -   ~~Linting - ESLint / Stylelint / Prettier / Husky~~
--   CSS Modules / PostCSS / Global styles
+-   ~~CSS Modules / PostCSS / Global styles~~
 -   React Testing Library
 -   Storybook
 -   MSW API Mocking
@@ -194,10 +194,64 @@ Any commits should now be automatically linted and fail with an appropriate erro
 
 Full information about installing RTL with nextjs is on [the website](https://nextjs.org/docs/testing)
 
-Install the packages: `npm i -D jest babel-jest @testing-library/react @testing-library/jest-dom identity-obj-proxy react-test-renderer`
+And full information on RTL is on [the website](https://testing-library.com/docs/react-testing-library/intro) including using the API, setting up with custom renders, providers, etc.
 
-Create a `jest.config.js` file in the root of the project. There is a standard one on the nextjs documentation or a complete customised one in this repo.
+For our basic installation, add the packages: `npm i -D jest babel-jest @testing-library/react @testing-library/jest-dom identity-obj-proxy react-test-renderer`
+
+Create a `jest.config.js` file in the root of the project. There is a standard one on the nextjs documentation listed above that we will modify.
+
+Add the following scripts to the package.json to run the tests or watch-run the tests (listen for changes to files that affect tests and re-run them whenever a change is made):
+
+```
+		"test": "jest",
+		"test-watch": "jest --watch"
+```
 
 Create a `test` folder in the root of the project for test helpers to live.
 
-####
+#### Adding jest DOM
+
+Jest DOM provides us with a lot of additional matchers and functions that are helpful in tests. More information can be found on [the jest dom repo](https://github.com/testing-library/jest-dom/).
+
+To install it in this project we need to import the jest dom package before running every test. That works like this:
+
+Add a `jest-setup.tsx` file to the `test` folder and put `import '@testing-library/jest-dom';` in it.
+
+Add `setupFilesAfterEnv: ['<rootDir>/test/jest-setup.tsx']` to the jest config.
+
+#### Absolute paths
+
+To support the absolute paths we have in the `.tsconfig` file we need to add them to the `jest.config.js` as well like this:
+
+```
+module.exports = {
+  ...
+  moduleNameMapper: {
+    'src/(._)': '<rootDir>/src/$1',
+    'test/(._)': '<rootDir>/test/$1',
+  },
+}
+
+```
+
+#### Mocking file requests
+
+Inside jest tests we want to only test functionality, so we can intercept file imports (images, fonts, etc) inside our modules and re-point the import to a file mock file. This is done with the `identity-obj-proxy` package like this:
+
+1. Add a `file-mock.js` file to the `test` helper folder and add `module.exports = 'test-file-stub';` to it.
+2. Add a `style-mock.js` file to the `test` helper folder and add `module.exports = {};` to it.
+3. Modify the jest config moduleNameMapper object following properties to point to our mocks:
+
+```
+  '^.+\\.(css|sass|scss)$': '<rootDir>/test/style-mock.js',
+  '^.+\\.(jpg|jpeg|png|gif|webp|svg)$': '<rootDir>/test/file-mock.js',
+
+```
+
+#### Writing tests
+
+Tests should be co-located alongside their corresponding component unless covering an integration of a larger piece of functionality. They follow the usual naming convention of `index.test.tsx`.
+
+Testing strategy is roughly to cover user-behaviour rather than implementation. Using `data-testid` as a hook is preferred wherever possible. More information on testing strategy can be found in this [solid introduction by Kent C Dodds](https://kentcdodds.com/blog/write-tests).
+
+There are some example tests included with the components in this repo.
