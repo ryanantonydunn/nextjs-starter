@@ -1,42 +1,32 @@
 # NextJS starter instructions
 
-Creating starter writeup TODO:
+## TODO:
 
--   ~~NextJS / TS~~
--   ~~Component structure~~
--   ~~Absolute paths~~
--   ~~Linting - ESLint / Stylelint / Prettier / Husky~~
--   ~~CSS Modules / PostCSS / Global styles~~
--   ~~React Testing Library~~
--   ~~Custom pages folder~~
--   Storybook
--   MSW API Mocking
+-   storybook
+-   msw
 
-Stack:
+This is a fresh next.js project including pre-set-up configurations for a particular stack. You may clone this repo outright and start a new project if you like, but it's suggested to follow the instructions in the readme to add pieces as needed for the following reasons:
 
--   Typescript
--   React
--   NextJS
--   CSS Modules
--   PostCSS + Nesting
--   Storybook
--   React Testing Library / Jest
--   MSW
--   ESLint / StyleLint / Prettier
--   Husky / Lint Staged
+-   The packages will be more up to date
+-   Only what's needed for the project can be added as needed
+-   You will have a better understanding of how the pieces work and why they've been added
+-   Stack and organisation choices can be substituted for whatever you prefer
 
-Components
+The stack and features covered here are:
 
--   atoms/form-fields/TextInput
--   atoms/form-fields/Select
--   atoms/Button / LinkButton
--   organisms/ApiExample
+-   Typescript - Static typing for Javascript
+-   React / NextJS - The main library and framework to handle a lot of the heavy lifting
+-   CSS Modules - Keeping styles scoped to their components
+-   PostCSS + Nesting - Allowing for SASS-style nested CSS in modules
+-   Storybook - A design-system-like framework for all UI components to be shown and tested
+-   React Testing Library / Jest - Automated unit and integration tests
+-   Mock Service Worker - Allowing for mocking fetch calls in our tests/storybook stories
+-   ESLint / StyleLint / Prettier - Linting and automatic code-formatting
+-   Husky / Lint Staged - Automatically running our linters and formatters when code is committed
 
-Considerations:
+Additionally there are suggested folder and naming structures included.
 
--   Use instructions to build project rather than starter, packages will be more up to date and bits of the stack can be left out as needed or wanted
--   All are optional including stack choices and linting settings
--   Folder structure is added but is only suggested
+All decisions in the repo and readme are optional including stack choices, linting settings, folder structure and anything else. If you think something different is a better solution for your project, do it, I'm not your mum.
 
 ## Instructions to create from scratch
 
