@@ -30,6 +30,13 @@ All decisions in the repo and readme are optional including stack choices, linti
 
 ## Instructions to create from scratch
 
+1. Set up new nextjs app with TypeScript
+2. Set up a component structure
+3. Absolute paths
+4. Set up PostCSS
+5. Linting
+6. React Testing Library
+
 ### 1. Set up new nextjs app with TypeScript
 
 Run create next command with typescript argument in your projects directory: `npx create-next-app --ts`
@@ -194,7 +201,7 @@ npx husky add .husky/pre-commit "npx lint-staged"
 
 Any commits should now be automatically linted and fail with an appropriate error when necessary.
 
-### 7. React Testing Library
+### 6. React Testing Library
 
 Full information about installing RTL with nextjs is on [the website](https://nextjs.org/docs/testing)
 
