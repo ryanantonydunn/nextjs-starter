@@ -1,0 +1,7 @@
+.count {
+	margin-bottom: var(--spacingMedium);
+	& > span {
+		font-weight: bold;
+		color: var(--colorGreen);
+	}
+}

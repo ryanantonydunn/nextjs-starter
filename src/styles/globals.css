@@ -2,13 +2,16 @@
 	/* colors */
 	--colorBlack: #000;
 	--colorWhite: #fff;
-	--colorBlue: #2244cc;
+	--colorGreen: #228844;
 
 	/* fonts */
 	--fontFamilyBase: Helvetica, arial, sans-serif;
 	--fontFamilyHeading: Georgia, serif;
 	--fontSizeRegular: 1.2rem;
 	--fontSizeLarge: 2rem;
+
+	/* spacing */
+	--spacingMedium: 2rem;
 
 	/* shadows */
 	--shadowLarge: 0 2px 30px 0 rgba(var(--colorBlack), 0.15);

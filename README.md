@@ -8,7 +8,7 @@ Creating starter writeup TODO:
 -   ~~Linting - ESLint / Stylelint / Prettier / Husky~~
 -   ~~CSS Modules / PostCSS / Global styles~~
 -   ~~React Testing Library~~
--   Custom pages folder
+-   ~~Custom pages folder~~
 -   Storybook
 -   MSW API Mocking
 
@@ -48,7 +48,7 @@ This will set up the project with a standard `.tsconfig`, eslint and a basic con
 
 ### 2. Set up a component structure
 
-In this starter all styles, components and API code is inside an `src` folder in the root of the project. The folder structure looks like this:
+In this starter all styles, components and API code is inside an `src` folder in the root of the project. Components live inside folders and are generally co-located with all related files (eg: tests, styles and storybook stories). The folder structure looks like this:
 
 ```
 - src
@@ -66,14 +66,27 @@ In this starter all styles, components and API code is inside an `src` folder in
   +-- organisms (large components that contain major pieces of functionality or content)
     +-- ... (same as in atoms)
   +-- layout (headers, footers, shared layout and anything used on every page)
++-- pages
 +-- api (any data-layer code)
 ```
-
-The actual nextjs pages are still in the root `pages` folder but generally will contain layout and organism components and not contain much logic or styling of their own.
 
 There are a few components included in this starter with particularly tricky or useful type structures that I've found helpful. These can be used or replaced as needed.
 
 There is no state management library included here or examples of React Context, but should easily be integrated into this structure also as needed.
+
+#### Custom pages folder
+
+In normal next.js projects, the `pages` folder lives inside the root of the project and all files correspond with a route based on the name. Here the pages folder is moved inside the src folder which is automatically supported by next if a pages folder is not found in the root of the project.
+
+Also, I recommend following a similar structure to the other components and co-locating related files alongside the files. To make that work we can tell next.js to only make actual routes from pages with a `.page.tsx` extenstion by adding this to `next.config.js`:
+
+```
+pageExtensions: ['page.tsx'],
+```
+
+Note: when using this technique, any files that would also usually appear in a standard pages folder will need to have a set pageExtension. Eg: `_app.page.tsx`.
+
+More information on this technique is on [the next custom-page-extensions page](https://nextjs.org/docs/api-reference/next.config.js/custom-page-extensions)
 
 ### 3. Absolute paths
 

@@ -1,8 +1,9 @@
-const path = require("path");
+const path = require('path');
 
 module.exports = {
-  sassOptions: {
-    includePaths: [path.join(__dirname, "src/styles")],
-    prependData: `@import "variables";`,
-  },
+	sassOptions: {
+		includePaths: [path.join(__dirname, 'src/styles')],
+		prependData: `@import "variables";`,
+	},
+	pageExtensions: ['page.tsx', 'api.ts'],
 };
