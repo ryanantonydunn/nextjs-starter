@@ -2,7 +2,6 @@
 
 ## TODO:
 
--   storybook
 -   msw
 
 This is a fresh next.js project including pre-set-up configurations for a particular stack. You may clone this repo outright and start a new project if you like, but it's suggested to follow the instructions in the readme to add pieces as needed for the following reasons:
@@ -105,7 +104,7 @@ import { Button } from 'src/components/atoms/button'
 
 ### 4. Set up PostCSS
 
-PostCSS is included in Next by default. To use additional plugins you need to create a `custom postcss.config.js` file in the root of the project. To enable nesting you just need to set `"nesting-rules": true` in the feature object of `postcss-preset-env`.
+PostCSS is included in Next by default. To use additional plugins you need to create a custom `postcss.config.js` file in the root of the project. To enable nesting you just need to set `"nesting-rules": true` in the feature object of `postcss-preset-env`.
 
 In VSCode - at the time of writing it's slightly awkward to get proper nested syntax highlighting _without_ breaking the normal CSS intellisense. Use the `postcss-sugarss-language` extension and not the `PostCSS Language Support` extension and add this to the workspace settings:
 
@@ -281,8 +280,104 @@ To import the global styles into all stories add this line: `import '../src/styl
 
 #### PostCSS
 
+To support PostCSS here a custom webpack config rule loading CSS files is required. So we need to install the loaders: `npm i -D css-loader style-loader postcss-loader`.
+
+Then in the `./.storybook/main.js` file, add `const path = require('path');` to the top and this to the exports:
+
+```
+	webpackFinal: async (config, { configType }) => {
+		// remove the existing css rule
+		config.module.rules = config.module.rules.filter(
+			(f) => f.test.toString() !== '/\\.css$/',
+		);
+
+		// add loader for css modules
+		config.module.rules.push({
+			test: /\.css$/,
+			include: path.resolve(__dirname, '../src'),
+			use: [
+				'style-loader',
+				{
+					loader: 'css-loader',
+					options: {
+						importLoaders: 1,
+						modules: true,
+					},
+				},
+				'postcss-loader',
+			],
+		});
+
+		// return the altered config
+		return config;
+	},
+```
+
 #### Next images
+
+To support the nextjs image component within stories we just need to add this to the `./.storybook/preview.js` file:
+
+```
+const OriginalNextImage = NextImage.default;
+
+Object.defineProperty(NextImage, 'default', {
+  configurable: true,
+  value: (props) => <OriginalNextImage {...props} unoptimized />,
+});
+```
 
 #### Decorators
 
+If you have providers around your app, eg: React Context or Redux then these can be added around every story by exporting the `decorators` variable from `./.storybook/preview.js` like this:
+
+```
+export const decorators = [
+  (Story) => (
+    <MemoryRouterProvider>
+      <StoreProvider>
+        <Story />
+      </StoreProvider>
+    </MemoryRouterProvider>
+  ),
+];
+```
+
 #### SASS
+
+As of the time of writing SASS is much more difficult to get running in combination with next and CSS modules. To get it to work you need to set it up as follows:
+
+1. Initialise storybook using the old webpack 4 config: `npx sb init`
+2. Install the loaders with style-loader and css-loader specifically downgraded to these versions. Higher will not work: `npm i -D sass-loader css-loader@5 style-loader@2
+3. To add your globals before each story you need to import directly using the loaders into `preview.js` like this: `import '!style-loader!css-loader!sass-loader!../src/styles/globals.scss';`
+4. To load scss files correctly inside components `main.js` needs this adding to its exports:
+
+```
+  webpackFinal: async (config, { configType }) => {
+    // add scss loader rules
+    config.module.rules.push({
+      test: /\.module\.scss$/,
+      include: path.resolve(__dirname, '../src/components'),
+      use: [
+        'style-loader',
+        {
+          loader: 'css-loader',
+          options: {
+            importLoaders: 1,
+            modules: true,
+          },
+        },
+        {
+          loader: 'sass-loader',
+          options: {
+            sourceMap: false,
+            additionalData: `@import "${path.resolve(
+              __dirname,
+              '../src/styles/_variables.scss',
+            )}";`,
+          },
+        },
+      ],
+    });
+```
+
+Note that without the `additionalData` property here you won't be able to use any of the SASS variables or mixins inside your stories. This can be added to with multiple files if needed.
