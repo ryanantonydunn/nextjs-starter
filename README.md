@@ -266,3 +266,23 @@ Tests should be co-located alongside their corresponding component unless coveri
 Testing strategy is roughly to cover user-behaviour rather than implementation. Using `data-testid` as a hook is preferred wherever possible. More information on testing strategy can be found in this [solid introduction by Kent C Dodds](https://kentcdodds.com/blog/write-tests).
 
 There are some example tests included with the components in this repo.
+
+### Storybook
+
+Storybook is a UI component explorer that we can use to manage and test our design system. Full information is on [the storybook website](https://storybook.js.org/).
+
+⚠️ Warning: if you want to use SASS with this setup then the following instructions won't work as of the time of writing. SASS will require a webpack 4 compiler and a separate config.
+
+To set up run `npx sb init` and run `npm run storybook` to see the basic setup with examples.
+
+When creating stories here, I recommend co-locating the story alongside the component eg: `src/components/atoms/button/index.stories.tsx` and not using the standard `src/stories` folder. Optionally you can remove this folder if you don't want the examples cluttering it up.
+
+To import the global styles into all stories add this line: `import '../src/styles/globals.css';` to the top of `./.storybook/preview.js`.
+
+#### PostCSS
+
+#### Next images
+
+#### Decorators
+
+#### SASS
