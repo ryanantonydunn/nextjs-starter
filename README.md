@@ -29,12 +29,13 @@ All decisions in the repo and readme are optional including stack choices, linti
 
 ## Instructions to create from scratch
 
-1. Set up new nextjs app with TypeScript
-2. Set up a component structure
+1. New nextjs app with TypeScript
+2. Component structure
 3. Absolute paths
-4. Set up PostCSS
+4. PostCSS
 5. Linting
 6. React Testing Library
+7. Storybook
 
 ### 1. Set up new nextjs app with TypeScript
 
@@ -266,7 +267,7 @@ Testing strategy is roughly to cover user-behaviour rather than implementation. 
 
 There are some example tests included with the components in this repo.
 
-### Storybook
+### 7. Storybook
 
 Storybook is a UI component explorer that we can use to manage and test our design system. Full information is on [the storybook website](https://storybook.js.org/).
 
