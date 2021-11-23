@@ -273,7 +273,7 @@ Storybook is a UI component explorer that we can use to manage and test our desi
 
 ⚠️ Warning: if you want to use SASS with this setup then the following instructions won't work as of the time of writing. SASS will require a webpack 4 compiler and a separate config.
 
-To set up run `npx sb init` and run `npm run storybook` to see the basic setup with examples.
+To set up run `npx sb init --builder webpack5` and run `npm run storybook` to see the basic setup with examples.
 
 When creating stories here, I recommend co-locating the story alongside the component eg: `src/components/atoms/button/index.stories.tsx` and not using the standard `src/stories` folder. Optionally you can remove this folder if you don't want the examples cluttering it up.
 
@@ -348,7 +348,7 @@ export const decorators = [
 As of the time of writing SASS is much more difficult to get running in combination with next and CSS modules. To get it to work you need to set it up as follows:
 
 1. Initialise storybook using the old webpack 4 config: `npx sb init`
-2. Install the loaders with style-loader and css-loader specifically downgraded to these versions. Higher will not work: `npm i -D sass-loader css-loader@5 style-loader@2
+2. Install the loaders with style-loader and css-loader specifically downgraded to these versions. Higher will not work: `npm i -D sass-loader css-loader@5 style-loader@2`
 3. To add your globals before each story you need to import directly using the loaders into `preview.js` like this: `import '!style-loader!css-loader!sass-loader!../src/styles/globals.scss';`
 4. To load scss files correctly inside components `main.js` needs this adding to its exports:
 
