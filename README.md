@@ -1,9 +1,5 @@
 # NextJS starter instructions
 
-## TODO:
-
--   msw
-
 This is a fresh next.js project including pre-set-up configurations for a particular stack. You may clone this repo outright and start a new project if you like, but it's suggested to follow the instructions in the readme to add pieces as needed for the following reasons:
 
 -   The packages will be more up to date
@@ -36,6 +32,7 @@ All decisions in the repo and readme are optional including stack choices, linti
 5. Linting
 6. React Testing Library
 7. Storybook
+8. Mock Service Worker
 
 ### 1. Set up new nextjs app with TypeScript
 
@@ -383,3 +380,66 @@ Then in the `./.storybook/main.js` file, add `const path = require('path');` to 
 Usually when building with SASS a single stylesheet is built and shared variables and mixins, etc are imported at the beginning of the compile process. Here each story is compiled separately so you need to import all of those files to each story individually. The `additionalData` option in the sass loader above is doing that for a simple `_variables.scss` file. This can be duplicated and modified for any additional files in your project (eg: a `_mixins.scss`).
 
 Importing globals with SASS into the top of `preview.js` will also require setting the loaders manually in the import like this: `import '!style-loader!css-loader!sass-loader!../src/styles/globals.scss';`.
+
+### 8. Mock Service Worker (MSW)
+
+Mock Service Worker is an API mocking library that uses Service Worker API to intercept actual requests (eg: fetch requests for API calls). [MSW website](https://mswjs.io/docs/)
+
+Here I'm using MSW to intercept fetch requests to the API in three places:
+
+-   Optionally when running the app with a `npm run dev-mock-api` command - so we can see the app running with mocked API calls returning the data. Useful for when the data contract has been agreed but the actual back-end hasn't released the API yet, when there are issues with it, also for debugging.
+-   In storybook stories - This allows us to show some of the more complex UI components that are reliant on API data to function properly.
+-   In integration tests - Allows us to run local tests on the app that are as close to the live envrionment as possible.
+
+All requests can be optionally intercepted so you can choose to mock some (eg: your fetch calls) and ignore others (resources like images).
+
+#### Set up MSW to run in the app
+
+To start with, install dependencies: `npm i -D msw` - and follow the basic [instructions for installing MSW for use in a browser](https://mswjs.io/docs/getting-started/install).
+
+I recommend moving the files into a more obvious folder, like: `./src/api/mocks` but wherever makes sense for your project.
+
+We want to only use this in a dev environment, so we're going to to code-split all mocking code so it never gets into the production code bundle. First create a `mock-api.tsx` file in the `./src/pages` folder:
+
+```
+import React from 'react';
+
+const MockApi: React.FC = () => {
+	React.useEffect(() => {
+		const { worker } = require('src/api/mocks/browser');
+		worker.start({ onUnhandledRequest: 'bypass' });
+	}, []);
+	return null;
+};
+
+export default MockApi;
+
+```
+
+Then create a dynamic import inside `_app.page.tsx` (or `_app.tsx` if you're not doing a custom file), and include it only if we set an env var:
+
+```
+import 'src/styles/globals.css';
+import type { AppProps } from 'next/app';
+import dynamic from 'next/dynamic';
+
+const MockApi = dynamic(() => import('./mock-api'));
+
+const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
+	return (
+		<>
+      {process.env.NEXT_PUBLIC_MOCK_API === 'true' && <MockApi />}
+			<Component {...pageProps} />
+		</>
+	);
+};
+export default MyApp;
+```
+
+Finally add a script in `package.json` to start the app with mocks and then you can choose to run your app with or without the mocked API calls:
+
+```
+"dev-mock-api": "NEXT_PUBLIC_MOCK_API=true next dev",
+```
+
+An example is in use in this repo in the `./src/api` folder and `./src/pages/test/index.page.tsx` file.

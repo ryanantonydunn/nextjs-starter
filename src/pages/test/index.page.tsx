@@ -4,6 +4,8 @@ import { Meta } from 'src/components/atoms/meta';
 import { ExampleCounter } from 'src/components/organisms/example-counter';
 import { Header } from 'src/components/layout/header';
 import styles from './index.module.css';
+import { Button } from 'src/components/atoms/button';
+import { fetchTest } from 'src/api/test';
 
 const TestPage: NextPage = () => {
 	return (
@@ -13,6 +15,8 @@ const TestPage: NextPage = () => {
 			<div className={styles.test}>
 				<h1>Test page</h1>
 				<ExampleCounter />
+				<br />
+				<Button onClick={fetchTest}>Run Fetch Test</Button>
 			</div>
 		</>
 	);
