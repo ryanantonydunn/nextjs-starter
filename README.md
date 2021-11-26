@@ -274,6 +274,14 @@ When creating stories here, I recommend co-locating the story alongside the comp
 
 To import the global styles into all stories add this line: `import '../src/styles/globals.css';` to the top of `./.storybook/preview.js`.
 
+I'll cover some of the tricky bits here which are:
+
+-   The nextjs Image component
+-   Decorators/Wrappers (eg: <StoreProvider> wrapping every story properly)
+-   PostCSS
+-   SASS
+-   Absolute module imports inside storied components
+
 #### Next images
 
 To support the nextjs image component within stories we just need to add this to the `./.storybook/preview.js` file:
@@ -381,6 +389,18 @@ Usually when building with SASS a single stylesheet is built and shared variable
 
 Importing globals with SASS into the top of `preview.js` will also require setting the loaders manually in the import like this: `import '!style-loader!css-loader!sass-loader!../src/styles/globals.scss';`.
 
+#### Module import errors
+
+To allow modules with absolute paths to be imported properly inside stories we need to add these lines to the custom webpack config added in the postcss or sass steps:
+
+```
+		// Needed to allow finding of imports inside of components
+		config.resolve.modules = [
+			...(config.resolve.modules || []),
+			path.resolve('./'),
+		];
+```
+
 ### 8. Mock Service Worker (MSW)
 
 Mock Service Worker is an API mocking library that uses Service Worker API to intercept actual requests (eg: fetch requests for API calls). [MSW website](https://mswjs.io/docs/)
@@ -403,15 +423,16 @@ I recommend moving the files into a more obvious folder, like: `./src/api/mocks`
 
 We want to only use this in a dev environment, so we're going to to code-split all mocking code so it never gets into the production code bundle. First create a `mock-api.tsx` file in the `./src/pages` folder:
 
-```
+````
+
 import React from 'react';
 
 const MockApi: React.FC = () => {
-	React.useEffect(() => {
-		const { worker } = require('src/api/mocks/browser');
-		worker.start({ onUnhandledRequest: 'bypass' });
-	}, []);
-	return null;
+React.useEffect(() => {
+const { worker } = require('src/api/mocks/browser');
+worker.start({ onUnhandledRequest: 'bypass' });
+}, []);
+return null;
 };
 
 export default MockApi;
@@ -421,6 +442,7 @@ export default MockApi;
 Then create a dynamic import inside `_app.page.tsx` (or `_app.tsx` if you're not doing a custom file), and include it only if we set an env var:
 
 ```
+
 import 'src/styles/globals.css';
 import type { AppProps } from 'next/app';
 import dynamic from 'next/dynamic';
@@ -428,20 +450,23 @@ import dynamic from 'next/dynamic';
 const MockApi = dynamic(() => import('./mock-api'));
 
 const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
-	return (
-		<>
-      {process.env.NEXT_PUBLIC_MOCK_API === 'true' && <MockApi />}
-			<Component {...pageProps} />
-		</>
-	);
+return (
+<>
+{process.env.NEXT_PUBLIC_MOCK_API === 'true' && <MockApi />}
+<Component {...pageProps} />
+</>
+);
 };
 export default MyApp;
+
 ```
 
 Finally add a script in `package.json` to start the app with mocks and then you can choose to run your app with or without the mocked API calls:
 
 ```
+
 "dev-mock-api": "NEXT_PUBLIC_MOCK_API=true next dev",
+
 ```
 
 #### MSW with Jest and React Testing Library
@@ -451,10 +476,12 @@ To allow testing of components with fetch calls in then - we need to use a polyf
 Next we need to set up a server handler alongside the browser in `./src/api/mocks/server.ts`:
 
 ```
+
 import { setupServer } from 'msw/node';
 import { handlers } from './handlers';
 
 export const server = setupServer(...handlers);
+
 ```
 
 Then you can choose to initialise this server before all jest tests, or you can decide to do it manually if you prefer. I choose to do it always, it adds no time as far as I can tell.
@@ -462,6 +489,7 @@ Then you can choose to initialise this server before all jest tests, or you can 
 Inside `./test/jest.setup.tsx` add:
 
 ```
+
 import { server } from 'src/api/mocks/server';
 
 beforeAll(() => server.listen());
@@ -471,3 +499,8 @@ afterAll(() => server.close());
 ```
 
 Once this is in place, you can expect tested components with fetch calls to function as they would in a browser. Eg: press a button and `waitFor` the response to appear on page. A full example is included in the repo.
+
+
+#### MSW in Storybook stories
+
+````

@@ -32,6 +32,12 @@ module.exports = {
 			],
 		});
 
+		// Needed to allow finding of imports inside of components
+		config.resolve.modules = [
+			...(config.resolve.modules || []),
+			path.resolve('./'),
+		];
+
 		// return the altered config
 		return config;
 	},
