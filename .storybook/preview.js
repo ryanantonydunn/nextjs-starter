@@ -1,5 +1,7 @@
 import '../src/styles/globals.css';
 
+// initialise mocked API
+// check for global process because this also runs during the build process
 if (typeof global.process === 'undefined') {
 	const { worker } = require('../src/api/mocks/browser');
 	worker.start({ onUnhandledRequest: 'bypass' });

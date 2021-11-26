@@ -413,7 +413,7 @@ Here I'm using MSW to intercept fetch requests to the API in three places:
 
 All requests can be optionally intercepted so you can choose to mock some (eg: your fetch calls) and ignore others (resources like images).
 
-A full example of all this in action is in this repo in the `./src/api` and `./src/components/atoms/example-fetch`folders.
+A full example of all this in action is in this repo in the `./src/api` and `./src/components/atoms/example-fetch` folders.
 
 #### Set up MSW to run in the app
 
@@ -423,8 +423,7 @@ I recommend moving the files into a more obvious folder, like: `./src/api/mocks`
 
 We want to only use this in a dev environment, so we're going to to code-split all mocking code so it never gets into the production code bundle. First create a `mock-api.tsx` file in the `./src/pages` folder:
 
-````
-
+```
 import React from 'react';
 
 const MockApi: React.FC = () => {
@@ -436,13 +435,11 @@ return null;
 };
 
 export default MockApi;
-
 ```
 
 Then create a dynamic import inside `_app.page.tsx` (or `_app.tsx` if you're not doing a custom file), and include it only if we set an env var:
 
 ```
-
 import 'src/styles/globals.css';
 import type { AppProps } from 'next/app';
 import dynamic from 'next/dynamic';
@@ -458,15 +455,12 @@ return (
 );
 };
 export default MyApp;
-
 ```
 
 Finally add a script in `package.json` to start the app with mocks and then you can choose to run your app with or without the mocked API calls:
 
 ```
-
 "dev-mock-api": "NEXT_PUBLIC_MOCK_API=true next dev",
-
 ```
 
 #### MSW with Jest and React Testing Library
@@ -476,7 +470,6 @@ To allow testing of components with fetch calls in then - we need to use a polyf
 Next we need to set up a server handler alongside the browser in `./src/api/mocks/server.ts`:
 
 ```
-
 import { setupServer } from 'msw/node';
 import { handlers } from './handlers';
 
@@ -489,7 +482,6 @@ Then you can choose to initialise this server before all jest tests, or you can 
 Inside `./test/jest.setup.tsx` add:
 
 ```
-
 import { server } from 'src/api/mocks/server';
 
 beforeAll(() => server.listen());
@@ -500,7 +492,22 @@ afterAll(() => server.close());
 
 Once this is in place, you can expect tested components with fetch calls to function as they would in a browser. Eg: press a button and `waitFor` the response to appear on page. A full example is included in the repo.
 
-
 #### MSW in Storybook stories
 
-````
+To run MSW in stories add these lines into the `./.storybook/preview.js`:
+
+```
+// initialise mocked API
+// check for global process because this also runs during the build process
+if (typeof global.process === 'undefined') {
+	const { worker } = require('../src/api/mocks/browser');
+	worker.start({ onUnhandledRequest: 'bypass' });
+}
+```
+
+And modify the package.json scripts for storybook to point to the `public` folder. This will allow it to find the MSW service worker in the public folder:
+
+```
+		"storybook": "start-storybook -s public -p 6006",
+		"build-storybook": "build-storybook -o public/storybook"
+```

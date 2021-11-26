@@ -14,8 +14,8 @@
 		"format": "prettier '*/**/*.{js,jsx,ts,tsx,json,md}' --write",
 		"test": "jest",
 		"test-watch": "jest --watch",
-		"storybook": "start-storybook -p 6006",
-		"build-storybook": "build-storybook"
+		"storybook": "start-storybook -s public -p 6006",
+		"build-storybook": "build-storybook -o public/storybook"
 	},
 	"dependencies": {
 		"next": "11.1.0",
