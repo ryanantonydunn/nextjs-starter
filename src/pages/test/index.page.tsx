@@ -1,11 +1,10 @@
-import React from 'react';
 import { NextPage } from 'next';
+import React from 'react';
 import { Meta } from 'src/components/atoms/meta';
-import { ExampleCounter } from 'src/components/organisms/example-counter';
 import { Header } from 'src/components/layout/header';
+import { ExampleCounter } from 'src/components/organisms/example-counter';
+import { ExampleFetch } from 'src/components/organisms/example-fetch';
 import styles from './index.module.css';
-import { Button } from 'src/components/atoms/button';
-import { fetchTest } from 'src/api/test';
 
 const TestPage: NextPage = () => {
 	return (
@@ -16,7 +15,7 @@ const TestPage: NextPage = () => {
 				<h1>Test page</h1>
 				<ExampleCounter />
 				<br />
-				<Button onClick={fetchTest}>Run Fetch Test</Button>
+				<ExampleFetch />
 			</div>
 		</>
 	);

@@ -31,4 +31,5 @@ module.exports = {
 		'^.+\\.module\\.(css|sass|scss)$',
 	],
 	setupFilesAfterEnv: ['<rootDir>/test/jest-setup.tsx'],
+	setupFiles: [require.resolve('whatwg-fetch')],
 };

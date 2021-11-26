@@ -388,10 +388,12 @@ Mock Service Worker is an API mocking library that uses Service Worker API to in
 Here I'm using MSW to intercept fetch requests to the API in three places:
 
 -   Optionally when running the app with a `npm run dev-mock-api` command - so we can see the app running with mocked API calls returning the data. Useful for when the data contract has been agreed but the actual back-end hasn't released the API yet, when there are issues with it, also for debugging.
--   In storybook stories - This allows us to show some of the more complex UI components that are reliant on API data to function properly.
 -   In integration tests - Allows us to run local tests on the app that are as close to the live envrionment as possible.
+-   In storybook stories - This allows us to show some of the more complex UI components that are reliant on API data to function properly.
 
 All requests can be optionally intercepted so you can choose to mock some (eg: your fetch calls) and ignore others (resources like images).
+
+A full example of all this in action is in this repo in the `./src/api` and `./src/components/atoms/example-fetch`folders.
 
 #### Set up MSW to run in the app
 
@@ -442,4 +444,30 @@ Finally add a script in `package.json` to start the app with mocks and then you 
 "dev-mock-api": "NEXT_PUBLIC_MOCK_API=true next dev",
 ```
 
-An example is in use in this repo in the `./src/api` folder and `./src/pages/test/index.page.tsx` file.
+#### MSW with Jest and React Testing Library
+
+To allow testing of components with fetch calls in then - we need to use a polyfill for window.fetch. So install this: `npm i -D whatwg-fetch` and add this line to the `jest.config.js` object: `setupFiles: [require.resolve('whatwg-fetch')],`
+
+Next we need to set up a server handler alongside the browser in `./src/api/mocks/server.ts`:
+
+```
+import { setupServer } from 'msw/node';
+import { handlers } from './handlers';
+
+export const server = setupServer(...handlers);
+```
+
+Then you can choose to initialise this server before all jest tests, or you can decide to do it manually if you prefer. I choose to do it always, it adds no time as far as I can tell.
+
+Inside `./test/jest.setup.tsx` add:
+
+```
+import { server } from 'src/api/mocks/server';
+
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
+
+```
+
+Once this is in place, you can expect tested components with fetch calls to function as they would in a browser. Eg: press a button and `waitFor` the response to appear on page. A full example is included in the repo.

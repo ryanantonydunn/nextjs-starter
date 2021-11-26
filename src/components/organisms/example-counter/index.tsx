@@ -5,10 +5,7 @@ import styles from './index.module.css';
 export const ExampleCounter: React.FC = () => {
 	const [count, setCount] = React.useState(0);
 	return (
-		<div>
-			<div className={styles.count}>
-				Current count: <span>{count}</span>
-			</div>
+		<div className={styles.counter}>
 			<Button
 				onClick={() => {
 					setCount(count + 1);
@@ -16,6 +13,9 @@ export const ExampleCounter: React.FC = () => {
 			>
 				Increment
 			</Button>
+			<div>
+				Current count: <span className={styles.value}>{count}</span>
+			</div>
 		</div>
 	);
 };
