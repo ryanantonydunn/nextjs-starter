@@ -271,13 +271,40 @@ There are some example tests included with the components in this repo.
 
 Storybook is a UI component explorer that we can use to manage and test our design system. Full information is on [the storybook website](https://storybook.js.org/).
 
-⚠️ Warning: if you want to use SASS with this setup then the following instructions won't work as of the time of writing. SASS will require a webpack 4 compiler and a separate config.
-
 To set up run `npx sb init --builder webpack5` and run `npm run storybook` to see the basic setup with examples.
 
-When creating stories here, I recommend co-locating the story alongside the component eg: `src/components/atoms/button/index.stories.tsx` and not using the standard `src/stories` folder. Optionally you can remove this folder if you don't want the examples cluttering it up.
+When creating stories here, I recommend co-locating the story alongside the component eg: `src/components/atoms/button/index.stories.tsx` and not using the standard `src/stories` folder. Optionally you can remove this folder if you don't want the examples cluttering it up. To support that the `stories` path matcher in `./.storybook/main.js` needs to be updated, eg: `'../src/**/*.stories.tsx',`.
 
 To import the global styles into all stories add this line: `import '../src/styles/globals.css';` to the top of `./.storybook/preview.js`.
+
+#### Next images
+
+To support the nextjs image component within stories we just need to add this to the `./.storybook/preview.js` file:
+
+```
+const OriginalNextImage = NextImage.default;
+
+Object.defineProperty(NextImage, 'default', {
+  configurable: true,
+  value: (props) => <OriginalNextImage {...props} unoptimized />,
+});
+```
+
+#### Decorators
+
+If you have providers around your app, eg: React Context or Redux then these can be added around every story by exporting the `decorators` variable from `./.storybook/preview.js` like this:
+
+```
+export const decorators = [
+  (Story) => (
+    <MemoryRouterProvider>
+      <StoreProvider>
+        <Story />
+      </StoreProvider>
+    </MemoryRouterProvider>
+  ),
+];
+```
 
 #### PostCSS
 
@@ -314,47 +341,15 @@ Then in the `./.storybook/main.js` file, add `const path = require('path');` to 
 	},
 ```
 
-#### Next images
-
-To support the nextjs image component within stories we just need to add this to the `./.storybook/preview.js` file:
-
-```
-const OriginalNextImage = NextImage.default;
-
-Object.defineProperty(NextImage, 'default', {
-  configurable: true,
-  value: (props) => <OriginalNextImage {...props} unoptimized />,
-});
-```
-
-#### Decorators
-
-If you have providers around your app, eg: React Context or Redux then these can be added around every story by exporting the `decorators` variable from `./.storybook/preview.js` like this:
-
-```
-export const decorators = [
-  (Story) => (
-    <MemoryRouterProvider>
-      <StoreProvider>
-        <Story />
-      </StoreProvider>
-    </MemoryRouterProvider>
-  ),
-];
-```
-
 #### SASS
 
-As of the time of writing SASS is much more difficult to get running in combination with next and CSS modules. To get it to work you need to set it up as follows:
+To support PostCSS here a custom webpack config rule loading CSS files is required. So we need to install the loaders: `npm i -D css-loader style-loader sass-loader`.
 
-1. Initialise storybook using the old webpack 4 config: `npx sb init`
-2. Install the loaders with style-loader and css-loader specifically downgraded to these versions. Higher will not work: `npm i -D sass-loader css-loader@5 style-loader@2`
-3. To add your globals before each story you need to import directly using the loaders into `preview.js` like this: `import '!style-loader!css-loader!sass-loader!../src/styles/globals.scss';`
-4. To load scss files correctly inside components `main.js` needs this adding to its exports:
+Then in the `./.storybook/main.js` file, add `const path = require('path');` to the top and this to the exports:
 
 ```
   webpackFinal: async (config, { configType }) => {
-    // add scss loader rules
+    // add loader for scss modules
     config.module.rules.push({
       test: /\.module\.scss$/,
       include: path.resolve(__dirname, '../src/components'),
@@ -379,6 +374,12 @@ As of the time of writing SASS is much more difficult to get running in combinat
         },
       ],
     });
+
+    // Return the altered config
+    return config;
+  },
 ```
 
-Note that without the `additionalData` property here you won't be able to use any of the SASS variables or mixins inside your stories. This can be added to with multiple files if needed.
+Usually when building with SASS a single stylesheet is built and shared variables and mixins, etc are imported at the beginning of the compile process. Here each story is compiled separately so you need to import all of those files to each story individually. The `additionalData` option in the sass loader above is doing that for a simple `_variables.scss` file. This can be duplicated and modified for any additional files in your project (eg: a `_mixins.scss`).
+
+Importing globals with SASS into the top of `preview.js` will also require setting the loaders manually in the import like this: `import '!style-loader!css-loader!sass-loader!../src/styles/globals.scss';`.
