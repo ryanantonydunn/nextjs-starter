@@ -23,6 +23,11 @@ Additionally there are suggested folder and naming structures included.
 
 All decisions in the repo and readme are optional including stack choices, linting settings, folder structure and anything else. If you think something different is a better solution for your project, do it, I'm not your mum.
 
+## TODO improvements here
+
+-   Make it so styles in CSS modules can be clicked to directly from inside files
+-   Fix env vars in package scripts to be able to be run from powershell
+
 ## Instructions to create from scratch
 
 1. New nextjs app with TypeScript
